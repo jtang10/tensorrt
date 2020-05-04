@@ -32,6 +32,7 @@ func NewImageClassificationPredictor(model dlframework.ModelManifest, opts ...op
 	span, ctx := tracer.StartSpanFromContext(ctx, tracer.APPLICATION_TRACE, "new_predictor")
 	defer span.Finish()
 
+	fmt.Println("I reached here.")
 	modelInputs := model.GetInputs()
 	if len(modelInputs) != 1 {
 		return nil, errors.New("number of inputs not supported")
