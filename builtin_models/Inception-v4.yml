@@ -1,7 +1,7 @@
 name: Inception # name of your model
 framework:
   name: TensorRT # framework for the model
-  version: 6.0.1 # framework version contraint
+  version: 7.0.0 # framework version contraint
 version: 4.0 # version information in semantic version format
 container: # containers used to perform model prediction
            # multiple platforms can be specified
@@ -30,6 +30,8 @@ inputs:
     parameters: # type parameters
       element_type: float32
       input_layer: 'data'
+      layout: 'HWC'
+      color_mode: 'BGR'
       dimensions: [3, 299, 299]
       mean: [128, 128, 128]
       scale: 128

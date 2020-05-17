@@ -2,6 +2,7 @@ package predictor
 
 import (
 	"context"
+	"fmt"
 	"image"
 	"os"
 	"path/filepath"
@@ -70,7 +71,7 @@ func TestNewImageClassificationPredictor(t *testing.T) {
 
 func TestImageClassification(t *testing.T) {
 	trt.Register()
-	model, err := trt.FrameworkManifest.FindModel("ResNet50_v1:1.0")
+	model, err := trt.FrameworkManifest.FindModel("inception-resnet:2.0")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 
@@ -103,6 +104,8 @@ func TestImageClassification(t *testing.T) {
 	height := preprocessOpts.Dims[1]
 	width := preprocessOpts.Dims[2]
 	mode := preprocessOpts.ColorMode
+	fmt.Println("dims:", preprocessOpts.Dims)
+	fmt.Println("mode:", mode)
 
 	imgOpts := []raiimage.Option{
 		raiimage.Mode(mode),
@@ -150,6 +153,7 @@ func TestImageClassification(t *testing.T) {
 	if err != nil {
 		return
 	}
+	fmt.Println(pred[0][0].GetClassification().GetIndex(), ": ", pred[0][0].GetProbability())
 	assert.InDelta(t, float32(0.99999), pred[0][0].GetProbability(), 0.001)
 	assert.Equal(t, int32(103), pred[0][0].GetClassification().GetIndex())
 }

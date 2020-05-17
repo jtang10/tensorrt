@@ -1,7 +1,7 @@
 name: BVLC-Reference-CaffeNet # name of your model
 framework:
   name: TensorRT # framework for the model
-  version: 6.0.1 # framework version contraint
+  version: 7.0.0 # framework version contraint
 version: 1.0 # version information in semantic version format
 container: # containers used to perform model prediction
            # multiple platforms can be specified
@@ -32,6 +32,9 @@ inputs:
     # description of the first input
     description: the input image
     parameters: # type parameters
+      layer_name: 'data'
+      layout: HWC
+      color_mode: BGR
       dimensions: [3, 227, 227]
       mean: [123, 117, 104]
 output:
@@ -44,8 +47,8 @@ output:
     features_url: http://data.dmlc.ml/mxnet/models/imagenet/synset.txt
     features_checksum: 4d234b5833aca44928065a180db3016a
 model: # specifies model graph and weights resources
-  graph_path: https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_reference_caffenet/deploy.prototxt
-  weights_path: http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel
+  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/bvlc_reference_caffenet/deploy.prototxt
+  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel
 
   is_archive: false # if set, then the base_url is a url to an archive
                     # the graph_path and weights_path then denote the
