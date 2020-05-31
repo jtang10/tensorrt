@@ -1,4 +1,4 @@
-name: VGG19 # name of your model
+name: Inception_v3_Caffe # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
@@ -12,13 +12,14 @@ container: # containers used to perform model prediction
     cpu: raiproject/carml-tensorrt:ppc64le-gpu
     gpu: raiproject/carml-tensorrt:ppc64le-gpu
 description: >
-  The model is an improved version of the 19-layer model used by the VGG team in the ILSVRC-2014 competition.
+  Inception-v3 is trained for the ImageNet Large Visual Recognition Challenge using the data from 2012.
+  This is a standard task in computer vision, where models try to classify entire images into 1000 classes, like "Zebra", "Dalmatian", and "Dishwasher".
 references: # references to papers / websites / etc.. describing the model
-  - https://gist.github.com/ksimonyan/3785162f95cd2d5fee77
-  - https://github.com/BVLC/caffe/wiki/Model-Zoo#models-used-by-the-vgg-team-in-ilsvrc-2014
-  - https://arxiv.org/abs/1409.1556
+  - https://github.com/soeaver/caffe-model/tree/master/cls
+  - https://github.com/dmlc/mxnet-model-gallery/blob/master/imagenet-1k-inception-v3.md
+  - https://github.com/tensorflow/models/blob/master/research/slim/preprocessing/inception_preprocessing.py
 # license of the model
-license: CC BY 4.0 (commercial use is allowed)
+license: unrestricted
 # inputs to the model
 inputs:
   # first input type for the model
@@ -26,27 +27,33 @@ inputs:
     # description of the first input
     description: the input image
     parameters: # type parameters
-      dimensions: [3, 224, 224]
-      mean: [123.68, 116.779, 103.939]
+      element_type: float32
+      input_layer: 'data'
+      layout: 'HWC'
+      color_mode: 'BGR'
+      dimensions: [3, 299, 299]
+      mean: [128, 128, 128]
+      scale: 128
 output:
   # the type of the output
-  type: feature
+  type: classification
   # a description of the output parameter
   description: the output label
   parameters:
     # type parameters
-    features_url: http://data.dmlc.ml/mxnet/models/imagenet/synset.txt
-    features_checksum: 4d234b5833aca44928065a180db3016a
+    element_type: float32
+    probabilities_layer: 'prob'
+    features_url: http://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset1000.txt
+    features_checksum: 7315c2c8bffdb680cf8c5d2a7c45c363
 model: # specifies model graph and weights resources
-  graph_path: https://gist.githubusercontent.com/ksimonyan/3785162f95cd2d5fee77/raw/f43eeefc869d646b449aa6ce66f87bf987a1c9b5/VGG_ILSVRC_19_layers_deploy.prototxt
-  weights_path: http://www.robots.ox.ac.uk/~vgg/software/very_deep/caffe/VGG_ILSVRC_19_layers.caffemodel
+  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/inception-v3/deploy_inception-v3.prototxt
+  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/inception-v3/inception-v3.caffemodel
   is_archive: false # if set, then the base_url is a url to an archive
                     # the graph_path and weights_path then denote the
                     # file names of the graph and weights within the archive
-  graph_checksum: ccbbdda59210208be39f8974f5b5765e
-  weights_checksum: b5c644beabd7cf06bdd9065cfd674c97
+  graph_checksum: f6232b561b2ffb1ff2d7c4ff6957f66b
+  weights_checksum: 0516c5ad05b50f6c71a8891a0cb6c4e8
 attributes: # extra network attributes
   kind: CNN # the kind of neural network (CNN, RNN, ...)
   training_dataset: ImageNet # dataset used to for training
   manifest_author: abduld
-  hidden: true

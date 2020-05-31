@@ -1,4 +1,4 @@
-name: ResNet101 # name of your model
+name: ResNet_v2_101 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
@@ -18,7 +18,8 @@ description: >
   On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity.
   An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task.
 references: # references to papers / websites / etc.. describing the model
-  - https://github.com/KaimingHe/deep-residual-networks
+  - https://github.com/soeaver/caffe-model/tree/master/cls
+  - https://github.com/craftGBD/craftGBD
   - https://arxiv.org/abs/1512.03385
 # license of the model
 license: unrestricted
@@ -34,10 +35,10 @@ inputs:
       layout: 'CHW'
       color_mode: 'BGR'
       dimensions: [3, 224, 224]
-      mean: [123.68, 116.779, 103.939]
+      mean: [122.772, 115.947, 102.98]
 output:
   # the type of the output
-  type: feature
+  type: classification
   # a description of the output parameter
   description: the output label
   parameters:
@@ -47,13 +48,13 @@ output:
     features_url: http://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset.txt
     features_checksum: 4d234b5833aca44928065a180db3016a
 model: # specifies model graph and weights resources
-  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet101/ResNet-101-deploy.prototxt
-  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet101/ResNet-101-model.caffemodel
+  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet101-v2/deploy_resnet101-v2.prototxt
+  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet101-v2/resnet101-v2.caffemodel
   is_archive: false # if set, then the base_url is a url to an archive
                     # the graph_path and weights_path then denote the
                     # file names of the graph and weights within the archive
-  graph_checksum: 3ec3d1a5d432ef54cb2d1afc9f83403a
-  weights_checksum: 3f8ccc93329ddc280b91efae09f71973
+  graph_checksum: 90e3a68da9f3eca03270487abc1ec4dd
+  weights_checksum: 780febbf5c47e40546d0d75a75cc8659
 attributes: # extra network attributes
   kind: CNN # the kind of neural network (CNN, RNN, ...)
   training_dataset: ImageNet # dataset used to for training

@@ -108,7 +108,7 @@ func (p *ImagePredictor) download(ctx context.Context) error {
 		opentracing.Tags{
 			"graph_url":           p.GetGraphUrl(),
 			"target_graph_file":   p.GetGraphPath(),
-			"weights_url":         p.GetWeightsUrl(),
+			"weight  s_url":       p.GetWeightsUrl(),
 			"target_weights_file": p.GetWeightsPath(),
 		},
 	)
@@ -139,16 +139,18 @@ func (p *ImagePredictor) download(ctx context.Context) error {
 			return err
 		}
 
-		span.LogFields(
-			olog.String("event", "download model weights"),
-		)
-		_, _, err = downloadmanager.DownloadFile(
-			p.GetWeightsUrl(),
-			p.GetWeightsPath(),
-			downloadmanager.MD5Sum(p.GetWeightsChecksum()),
-		)
-		if err != nil {
-			return err
+		if p.GetWeightsPath() != "" {
+			span.LogFields(
+				olog.String("event", "download model weights"),
+			)
+			_, _, err = downloadmanager.DownloadFile(
+				p.GetWeightsUrl(),
+				p.GetWeightsPath(),
+				downloadmanager.MD5Sum(p.GetWeightsChecksum()),
+			)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

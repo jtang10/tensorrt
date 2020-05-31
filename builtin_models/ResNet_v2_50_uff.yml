@@ -1,0 +1,57 @@
+name: ResNet_v2_50
+framework:
+  name: TensorRT
+  version: 7.0.0
+version: 1.0
+container:
+  amd64:
+    gpu: raiproject/carml-tensorflow:amd64-cpu
+    cpu: raiproject/carml-tensorflow:amd64-gpu
+  ppc64le:
+    cpu: raiproject/carml-tensorflow:ppc64le-gpu
+    gpu: raiproject/carml-tensorflow:ppc64le-gpu
+description: >
+  An image-classification network built of layers that learn residual functions w.r.t layer inputs.
+  This model is from TensorFlow Models Slim (resnet_v2_50_2017_04_14.tar.gz).
+references:
+  - https://arxiv.org/pdf/1512.03385.pdf
+  - https://github.com/tensorflow/models/tree/master/research/slim
+license: unrestricted
+# inputs to the model
+inputs:
+  # first input type for the model
+  - type: image
+    # description of the first input
+    description: the input image
+    parameters: # type parameters
+      element_type: float32
+      input_layer: 'input'
+      layout: 'HWC'
+      color_mode: 'RGB'
+      dimensions: [3, 224, 224]
+      mean: [128, 128, 128]
+      scale: 128
+output:
+  # the type of the output
+  type: classification
+  # a description of the output parameter
+  description: the output label
+  parameters: # type parameters
+    element_type: float32
+    probabilities_layer: 'resnet_v2_50/predictions/Reshape_1'
+    features_url: https://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset1.txt
+    features_checksum: 6c05083991207dea5c37f2d271014fad
+model:
+  base_url: https://s3.amazonaws.com/store.carml.org/models/uff/resnet_v2_50_1.0/
+  graph_path: resnet_v2_50_frozen.uff
+  graph_checksum: d512d8590f7a3b0e742d21c15987fe8a
+  is_archive:
+    false # if true, then the base_url is a url to an archive
+    # the graph_path and weights_path then denote the
+    # file names of the graph and weights within the archive
+attributes: # extra network attributes
+  kind: CNN # the kind of neural network (CNN, RNN, ...)
+  training_dataset: ImageNet # dataset used to for training
+  manifest_author: Jingning Tang
+  top1: 75.6
+  top5: 92.8

@@ -1,8 +1,8 @@
-name: WRN50 # name of your model
+name: WRN50_v2 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
-version: 2.0 # version information in semantic version format
+version: 1.0 # version information in semantic version format
 container: # containers used to perform model prediction
            # multiple platforms can be specified
   amd64:
@@ -41,7 +41,7 @@ inputs:
       scale: 256
 output:
   # the type of the output
-  type: feature
+  type: classification
   # a description of the output parameter
   description: the output label
   parameters:

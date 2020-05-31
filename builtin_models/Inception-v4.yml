@@ -1,8 +1,8 @@
-name: Inception # name of your model
+name: Inception_v4 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
-version: 4.0 # version information in semantic version format
+version: 1.0 # version information in semantic version format
 container: # containers used to perform model prediction
            # multiple platforms can be specified
   amd64:

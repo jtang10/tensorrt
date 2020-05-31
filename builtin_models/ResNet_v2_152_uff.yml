@@ -1,4 +1,4 @@
-name: ResNet152 # name of your model
+name: ResNet_v2_152 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
@@ -12,13 +12,14 @@ container: # containers used to perform model prediction
     cpu: raiproject/carml-tensorrt:ppc64le-gpu
     gpu: raiproject/carml-tensorrt:ppc64le-gpu
 description: >
-  A Residual learning framework to ease the training of networks that are substantially deeper than those used previously.
+  Residual learning framework to ease the training of networks that are substantially deeper than those used previously.
   We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions.
   We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth.
   On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers---8x deeper than VGG nets but still having lower complexity.
   An ensemble of these residual nets achieves 3.57% error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task.
 references: # references to papers / websites / etc.. describing the model
-  - https://github.com/KaimingHe/deep-residual-networks
+  - https://github.com/soeaver/caffe-model/tree/master/cls
+  - https://github.com/craftGBD/craftGBD
   - https://arxiv.org/abs/1512.03385
 # license of the model
 license: unrestricted
@@ -30,31 +31,32 @@ inputs:
     description: the input image
     parameters:
       element_type: float32
-      input_layer: 'data'
-      layout: 'CHW'
-      color_mode: 'BGR'
+      input_layer: 'input'
+      layout: 'HWC'
+      color_mode: 'RGB'
       dimensions: [3, 224, 224]
-      mean: [123.68, 116.779, 103.939]
+      mean: [128, 128, 128]
+      scale: 128
 output:
   # the type of the output
-  type: feature
+  type: classification
   # a description of the output parameter
   description: the output label
   parameters:
     # type parameters
     element_type: float32
-    probabilities_layer: 'prob'
-    features_url: http://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset.txt
-    features_checksum: 4d234b5833aca44928065a180db3016a
+    probabilities_layer: 'resnet_v2_152/predictions/Reshape_1'
+    features_url: https://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset1.txt
+    features_checksum: 6c05083991207dea5c37f2d271014fad
 model: # specifies model graph and weights resources
-  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet152/ResNet-152-deploy.prototxt
-  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/resnet152/ResNet-152-model.caffemodel
+  graph_path: http://s3.amazonaws.com/store.carml.org/models/uff/resnet_v2_152_1.0/resnet_v2_152_frozen.uff
   is_archive: false # if set, then the base_url is a url to an archive
                     # the graph_path and weights_path then denote the
                     # file names of the graph and weights within the archive
-  graph_checksum: 3d2b961982298ab8400319cc83d34e73
-  weights_checksum: 654892a23df300ca47ebfe66b4cfaa1b
+  graph_checksum: 06e7917abdf3cde895da1d10682b6d60
 attributes: # extra network attributes
   kind: CNN # the kind of neural network (CNN, RNN, ...)
   training_dataset: ImageNet # dataset used to for training
-  manifest_author: abduld
+  manifest_author: Jingning Tang
+# hidden: true
+

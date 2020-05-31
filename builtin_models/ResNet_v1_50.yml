@@ -1,4 +1,4 @@
-name: ResNet50_v1 # name of your model
+name: ResNet_v1_50 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint

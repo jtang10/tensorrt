@@ -33,7 +33,7 @@ inputs:
       mean: [122.67892, 116.66877, 104.00699]
 output:
   # the type of the output
-  type: feature
+  type: classification
   # a description of the output parameter
   description: the output label
   parameters:

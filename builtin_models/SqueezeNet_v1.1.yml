@@ -1,4 +1,5 @@
-name: Network in Network # name of your model
+
+name: SqueezeNet_v1.1 # name of your model
 framework:
   name: TensorRT # framework for the model
   version: 7.0.0 # framework version contraint
@@ -6,54 +7,50 @@ version: 1.0 # version information in semantic version format
 container: # containers used to perform model prediction
            # multiple platforms can be specified
   amd64:
-    gpu: raiproject/carml-mxnet:amd64-cpu
-    cpu: raiproject/carml-mxnet:amd64-gpu
+    gpu: raiproject/carml-tensorrt:amd64-cpu
+    cpu: raiproject/carml-tensorrt:amd64-gpu
   ppc64le:
-    cpu: raiproject/carml-mxnet:ppc64le-gpu
-    gpu: raiproject/carml-mxnet:ppc64le-gpu
+    cpu: raiproject/carml-tensorrt:ppc64le-gpu
+    gpu: raiproject/carml-tensorrt:ppc64le-gpu
 description: >
-  This model is a pretrained model on ILSVRC2012[1] dataset.
-  It is able to achieve 58.8% Top-1 Accuracy and 81.3% Top-5 accuracy on ILSVRC2012-Validation Set.
+  SqueezeNet v1.1 has 2.4x less computation than v1.0, without sacrificing accuracy.
 references: # references to papers / websites / etc.. describing the model
-  - https://gist.github.com/mavenlin/d802a5849de39225bcc6
-  - https://arxiv.org/abs/1312.4400
+  - https://github.com/DeepScale/SqueezeNet
+  - https://arxiv.org/abs/1602.07360
+  - https://github.com/dividiti/ck-tensorrt/tree/master/package/caffemodel-deepscale-squeezenet-1.1
+  - http://cknowledge.org/repo/web.php?template=cknowledge&&wcid=package:59414348b1bdedb5
 # license of the model
-license: non-commercial
+license: BAIR
 # inputs to the model
 inputs:
-  # first input type for the model
-  - type: image
-    # description of the first input
-    description: the input image
-    parameters: # type parameters
+  - type: image # first input modality
+    description: the input image # description of the first input
+    parameters:
       element_type: float32
       input_layer: 'data'
-      layout: 'CHW'
+      layout: 'HWC'
       color_mode: 'BGR'
-      dimensions: [3, 224, 224]
-      mean: [123, 117, 104]
+      dimensions: [3, 227, 227]
+      mean: [128, 128, 128]
 output:
   # the type of the output
   type: classification
   # a description of the output parameter
   description: the output label
-  parameters:
-    # type parameters
+  parameters: # type parameters
     element_type: float32
     probabilities_layer: 'prob'
     features_url: http://s3.amazonaws.com/store.carml.org/synsets/imagenet/synset.txt
     features_checksum: 4d234b5833aca44928065a180db3016a
 model: # specifies model graph and weights resources
-  base_url: http://s3.amazonaws.com/store.carml.org/models/caffe/nin
-  graph_path: deploy.prototxt
-  weights_path: nin_imagenet.caffemodel
+  graph_path: http://s3.amazonaws.com/store.carml.org/models/caffe/squeezenet_1.1/deploy.prototxt
+  weights_path: http://s3.amazonaws.com/store.carml.org/models/caffe/squeezenet_1.1/squeezenet_v1.1.caffemodel
   is_archive: false # if set, then the base_url is a url to an archive
                     # the graph_path and weights_path then denote the
                     # file names of the graph and weights within the archive
-  graph_checksum: 8c749056e1c3481e118d719a3344e590
-  weights_checksum: b568958c0dcf1d97cbcff4c22b02a2be
+  graph_checksum: 1e67cb171e16a4d66fd331409d2f7b0d
+  weights_checksum: 0357e4e11d173c72a01615888826bc8e
 attributes: # extra network attributes
   kind: CNN # the kind of neural network (CNN, RNN, ...)
   training_dataset: ImageNet # dataset used to for training
   manifest_author: abduld
-hidden: true

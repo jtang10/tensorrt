@@ -30,6 +30,10 @@ func NewImageClassificationPredictor(model dlframework.ModelManifest, opts ...op
 	span, ctx := tracer.StartSpanFromContext(ctx, tracer.APPLICATION_TRACE, "new_predictor")
 	defer span.Finish()
 
+	if !nvidiasmi.HasGPU {
+		panic("no GPU")
+	}
+
 	modelInputs := model.GetInputs()
 	if len(modelInputs) != 1 {
 		return nil, errors.New("number of inputs not supported")
@@ -60,9 +64,6 @@ func (self *ImageClassificationPredictor) Load(ctx context.Context, modelManifes
 		return nil, errors.Wrap(err, "failed to get the prediction options")
 	}
 
-	if !nvidiasmi.HasGPU {
-		panic("no GPU")
-	}
 	device := options.CUDA_DEVICE
 
 	batchSize := pred.BatchSize()

@@ -1,0 +1,10 @@
+from cpp_demangle import demangle
+
+mangled_strings = [
+    '_ZN5fused26fusedConvolutionReluKernelINS_24SrcChwcPtr_FltTex_ReaderIfLi1ELi1ELi2ELi2EEENS_13KpqkPtrWriterIfLi1ELi1ELi2EEEffLi3ELi9ELi8ELi1ELi1ELi1ELi1EEEvNS_17ConvolutionParamsINT_7SrcTypeET2_NT0_4TypeEEE',
+    '_ZN5cudnn6detail23implicit_convolve_sgemmIffLi1024ELi5ELi5ELi3ELi3ELi3ELi1ELb1ELb0ELb1EEEviiiPKT_iPT0_PS2_18kernel_conv_paramsiffiS6_S6_ii',
+    '_Z24op_generic_tensor_kernelILi3EfffLi256EL16cudnnGenericOp_t0EL21cudnnNanPropagation_t0ELi0EEv17cudnnTensorStructPT2_S2_PKT0_S2_S7_T1_S8_S8_S8_19reducedDivisorArrayi',
+]
+
+for s in mangled_strings:
+    print(demangle(s))

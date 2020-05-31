@@ -53,7 +53,7 @@ func normalizeImageCHW(in0 image.Image, mean []float32, scale []float32) ([]floa
 
 func TestNewImageClassificationPredictor(t *testing.T) {
 	trt.Register()
-	model, err := trt.FrameworkManifest.FindModel("ResNet50_v1:1.0")
+	model, err := trt.FrameworkManifest.FindModel("vgg19:1.0")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 
@@ -71,7 +71,7 @@ func TestNewImageClassificationPredictor(t *testing.T) {
 
 func TestImageClassification(t *testing.T) {
 	trt.Register()
-	model, err := trt.FrameworkManifest.FindModel("inception-resnet:2.0")
+	model, err := trt.FrameworkManifest.FindModel("vgg19:1.0")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, model)
 
